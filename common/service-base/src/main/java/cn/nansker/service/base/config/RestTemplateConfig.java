@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
 /**
  * @author Nansker
  * @date 2023/9/21 17:24
- * @description TODO
+ * @description RestTemplate配置类
  */
 @Configuration
 public class RestTemplateConfig {
