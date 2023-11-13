@@ -27,22 +27,23 @@ public class PasswordUtils {
 	public static final String DEFAULT_SALT = "nansker2023";
 
 	/**
-	 * @return java.lang.String
-	 * @author Nansker
+	 * 生成随机加密盐值
+	 *
+	 * @param
+	 * @return String
 	 * @date 2023/9/18 20:15
-	 * @description 生成盐值
 	 */
 	public static String generateSalt() {
 		return getString(SALT_LENGTH);
 	}
 
 	/**
+	 * 将密码进行MD5加盐加密
+	 *
+	 * @param salt     加密盐值
 	 * @param password 原始密码
-	 * @param salt     加密盐
-	 * @return java.lang.String
-	 * @author Nansker
-	 * @date 2023/9/18 20:14
-	 * @description 将密码进行MD5加盐加密
+	 * @return String
+	 * @date 2023/11/13 23:54
 	 */
 	public static String hashPassword(String salt, String password) {
 		String hash = null;
@@ -63,11 +64,11 @@ public class PasswordUtils {
 	}
 
 	/**
+	 * 将密码进行MD5加盐加密
+	 *
 	 * @param password 原始密码
-	 * @return java.lang.String
-	 * @author Nansker
-	 * @date 2023/9/18 20:14
-	 * @description 将密码进行MD5加盐加密
+	 * @return String
+	 * @date 2023/11/13 23:55
 	 */
 	public static String hashPassword(String password) {
 		String hash = null;
@@ -88,13 +89,13 @@ public class PasswordUtils {
 	}
 
 	/**
+	 * 验证密码是否相同
+	 *
 	 * @param salt           盐值
 	 * @param password       原始密码
 	 * @param hashedPassword 加密后的密码
 	 * @return boolean
-	 * @author Nansker
-	 * @date 2023/9/18 20:15
-	 * @description 比较密码是否相同
+	 * @date 2023/11/13 23:56
 	 */
 	public static boolean verifyPassword(String salt, String password, String hashedPassword) {
 		String newHash = hashPassword(password, salt);
@@ -102,12 +103,12 @@ public class PasswordUtils {
 	}
 
 	/**
+	 * 验证密码是否相同
+	 *
 	 * @param password       原始密码
 	 * @param hashedPassword 加密后的密码
 	 * @return boolean
-	 * @author Nansker
-	 * @date 2023/9/18 20:15
-	 * @description 比较密码是否相同
+	 * @date 2023/11/13 23:56
 	 */
 	public static boolean verifyPassword(String password, String hashedPassword) {
 		String newHash = hashPassword(password);
