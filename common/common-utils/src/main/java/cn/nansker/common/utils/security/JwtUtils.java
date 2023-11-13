@@ -20,35 +20,42 @@ import java.util.Map;
  */
 @Slf4j
 public class JwtUtils {
+	//token有效期 1天
 	public static final long EXPIRE = 60 * 60 * 24 * 1000;
 	public static final String APP_SECRET = "nansker2023";
 
 	/**
+	 * 生成token
+	 *
 	 * @param id       用户id
-	 * @param username 用户账号
-	 * @return java.lang.String
-	 * @author Nansker
+	 * @param username 用户名
+	 * @return String
 	 * @date 2023/9/18 0:43
-	 * @description 生成token
 	 */
 	public static String getJwtToken(String id, String username) {
-		String jwtToken = Jwts.builder().setHeaderParam("typ", "JWT").setHeaderParam("alg", "HS256").setSubject("user").setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + EXPIRE)).claim("id", id).claim("username", username).signWith(SignatureAlgorithm.HS256, APP_SECRET).compact();
+		String jwtToken = Jwts.builder().setHeaderParam("typ", "JWT").setHeaderParam("alg", "HS256").setSubject("user")
+				//设置过期时间
+				.setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + EXPIRE))
+				//设置包含
+				.claim("id", id).claim("username", username).signWith(SignatureAlgorithm.HS256, APP_SECRET).compact();
 		return jwtToken;
 	}
 
 	/**
-	 * @param jwtToken
-	 * @return
-	 * @description 判断token是否存在与有效
+	 * 验证token有效性
+	 *
+	 * @param token
+	 * @return boolean
+	 * @date 2023/11/13 23:47
 	 */
-	public static boolean checkToken(String jwtToken) {
-		if (StringUtils.isEmpty(jwtToken)) {
+	public static boolean checkToken(String token) {
+		if (StringUtils.isEmpty(token)) {
 			return false;
 		}
 		try {
-			Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(jwtToken);
+			Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(token);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 			return false;
 		}
 		return true;
@@ -74,9 +81,11 @@ public class JwtUtils {
 	}
 
 	/**
+	 * 获取token包含信息的Map集合
+	 *
 	 * @param request
-	 * @return
-	 * @description 根据token获取会员id
+	 * @return Map
+	 * @date 2023/11/13 23:48
 	 */
 	public static Map getUserIdAndUsernameMap(HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<>();
@@ -99,11 +108,11 @@ public class JwtUtils {
 	}
 
 	/**
+	 * 判断token是否过期
+	 *
 	 * @param claims
-	 * @return java.lang.Boolean
-	 * @author Nansker
+	 * @return Boolean
 	 * @date 2023/11/11 15:00
-	 * @description 判断token是否过期
 	 */
 	public static Boolean isTokenExpired(Claims claims) {
 		Date expiration = claims.getExpiration();
