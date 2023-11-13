@@ -47,14 +47,6 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 		this.loginLogService = loginLogService;
 	}
 
-	/**
-	 * @param request
-	 * @param response
-	 * @return org.springframework.security.core.Authentication
-	 * @author Nansker
-	 * @date 2023/11/9 23:05
-	 * @description 获取用户登录账号密码
-	 */
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 		try {
