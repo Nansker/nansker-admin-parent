@@ -13,7 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 /**
  * @author Nansker
  * @date 2023/10/24 23:25
- * @description TODO
+ * @description Knife4j配置类
  */
 @Configuration
 @EnableSwagger2WebMvc
