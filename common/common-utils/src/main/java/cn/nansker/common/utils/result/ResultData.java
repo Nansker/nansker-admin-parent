@@ -27,23 +27,26 @@ public class ResultData<T> implements Serializable {
 	private ResultData() {}
 
 	/**
-	 * @author Nansker
+	 * 成功响应
+	 *
+	 * @param
+	 * @return ResultData
 	 * @date 2023/9/18 0:42
-	 * @return com.nansker.utils.result.ResultData
-	 * @description 成功响应
-	*/
+	 */
 	public static ResultData ok() {
 		ResultData resultData = new ResultData();
 		resultData.setCode(StatusCode.SUCCESS.getCode());
 		resultData.setMessage(StatusCode.SUCCESS.getMessage());
 		return resultData;
 	}
+
 	/**
-	 * @author Nansker
+	 * 失败响应
+	 *
+	 * @param
+	 * @return ResultData
 	 * @date 2023/9/18 0:42
-	 * @return com.nansker.utils.result.ResultData
-	 * @description 失败响应
-	*/
+	 */
 	public static ResultData error() {
 		ResultData resultData = new ResultData();
 		resultData.setCode(StatusCode.ERROR.getCode());
@@ -70,13 +73,14 @@ public class ResultData<T> implements Serializable {
 		this.setMessage(resultCode.getMessage());
 		return this;
 	}
+
 	/**
-	 * @author Nansker
+	 * 获取分页数据
+	 *
+	 * @param page 分页数据-mybatis-plus
+	 * @return ResultData
 	 * @date 2023/9/18 0:43
-	 * @param page
-	 * @return com.nansker.utils.result.ResultData
-	 * @description mybatis-plus 分页数据
-	*/
+	 */
     public ResultData pageData(Page page) {
         Map<String, Object> map = new HashMap<>();
         map.put("rows", page.getRecords());
