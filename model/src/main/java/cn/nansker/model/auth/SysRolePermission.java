@@ -23,19 +23,21 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("sys_role_menu")
-@ApiModel(value = "SysRoleMenu对象", description = "角色菜单")
-public class SysRoleMenu implements Serializable {
+@TableName("sys_role_permission")
+@ApiModel(value = "SysRolePermission对象", description = "角色菜单")
+public class SysRolePermission implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	@ApiModelProperty(value = "主键id")
 	@TableId(value = "id", type = IdType.AUTO)
 	private Long id;
 
 	@ApiModelProperty(value = "角色id")
 	private Long roleId;
-	@ApiModelProperty(value = "菜单id")
-	private Long menuId;
+
+	@ApiModelProperty(value = "权限id")
+	private Long permissionId;
 
 	@ApiModelProperty(value = "创建时间")
 	private LocalDateTime createTime;

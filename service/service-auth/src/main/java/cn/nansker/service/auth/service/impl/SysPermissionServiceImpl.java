@@ -1,13 +1,13 @@
 package cn.nansker.service.auth.service.impl;
 
-import cn.nansker.service.auth.mapper.SysMenuMapper;
-import cn.nansker.service.auth.service.SysMenuService;
-import cn.nansker.service.auth.service.SysRoleMenuService;
+import cn.nansker.service.auth.mapper.SysPermissionMapper;
+import cn.nansker.service.auth.service.SysPermissionService;
+import cn.nansker.service.auth.service.SysRolePermissionService;
 import cn.nansker.service.auth.service.SysUserRoleService;
 import cn.nansker.service.auth.service.SysUserService;
 import cn.nansker.service.auth.util.MenuHelper;
 import cn.nansker.service.auth.util.RouterHelper;
-import cn.nansker.model.auth.SysMenu;
+import cn.nansker.model.auth.SysPermission;
 import cn.nansker.model.auth.SysUser;
 import cn.nansker.model.vo.RouterVo;
 import cn.nansker.service.base.exception.CustomException;
@@ -24,38 +24,38 @@ import java.util.List;
 
 /**
  * @author Nansker
- * @description 针对表【sys_menu(菜单表)】的数据库操作Service实现
+ * @description 针对表【sys_permission(菜单表)】的数据库操作Service实现
  * @createDate 2023-10-24 22:13:05
  */
 @Service
-public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements SysMenuService {
+public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, SysPermission> implements SysPermissionService {
 	@Autowired
 	SysUserService userService;
 	@Autowired
 	SysUserRoleService userRoleService;
 	@Autowired
-	SysRoleMenuService roleMenuService;
+	SysRolePermissionService rolePermissionService;
 
 	@Override
-	public List<SysMenu> getPermissionList(SysMenu menu) {
-		LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
+	public List<SysPermission> getPermissionList(SysPermission permission) {
+		LambdaQueryWrapper<SysPermission> queryWrapper = new LambdaQueryWrapper<>();
 
-		if (menu != null) {
-			queryWrapper.like(StringUtils.isNotEmpty(menu.getName()), SysMenu::getName, menu.getName());
-			queryWrapper.eq(menu.getStatus() != null, SysMenu::getStatus, menu.getStatus());
+		if (permission != null) {
+			queryWrapper.like(StringUtils.isNotEmpty(permission.getName()), SysPermission::getName, permission.getName());
+			queryWrapper.eq(permission.getStatus() != null, SysPermission::getStatus, permission.getStatus());
 		}
 
-		queryWrapper.orderByAsc(SysMenu::getSortValue);
+		queryWrapper.orderByAsc(SysPermission::getSortValue);
 
-		List<SysMenu> list = list(queryWrapper);
-		List<SysMenu> result = MenuHelper.buildTree(list);
+		List<SysPermission> list = list(queryWrapper);
+		List<SysPermission> result = MenuHelper.buildTree(list);
 		return result;
 	}
 
 	@Override
-	public void removeMenuById(Long id) {
+	public void removePermissionById(Long id) {
 		//判断当前菜单下是否有子菜单
-		QueryWrapper<SysMenu> queryWrapper = new QueryWrapper<>();
+		QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("parent_id", id);
 		Long count = baseMapper.selectCount(queryWrapper);
 		if (count > 0) {
@@ -66,17 +66,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
 	@Override
 	public List<RouterVo> getPermissionRouterByUserId(Long userId) {
-		List<SysMenu> permissionList = getPermissionByUserId(userId);
+		List<SysPermission> permissionList = getPermissionByUserId(userId);
 		//根据菜单信息构建权限路由
 		List<RouterVo> routerList = RouterHelper.buildRouters(permissionList);
 		return routerList;
 	}
 
 	@Override
-	public List<SysMenu> getPermissionByUserId(Long userId) {
+	public List<SysPermission> getPermissionByUserId(Long userId) {
 		//获取用户角色信息
 		List<Long> userRoles = userRoleService.getRoleByUserId(userId);
-		List<SysMenu> menuList;
+		List<SysPermission> permissionList;
 		boolean isAdmin = false;
 		//查询角色权限
 		for (Long roleId : userRoles) {
@@ -86,13 +86,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 			}
 		}
 		if (isAdmin) {
-			menuList = baseMapper.selectList(new QueryWrapper<SysMenu>().eq("status", 1).orderByAsc("sort_value"));
+			permissionList = baseMapper.selectList(new QueryWrapper<SysPermission>().eq("status", 1).orderByAsc("sort_value"));
 		} else {
-			menuList = baseMapper.findPermissionByUserId(userId);
+			permissionList = baseMapper.findPermissionByUserId(userId);
 		}
 
 		//构建树形
-		List<SysMenu> result = MenuHelper.buildTree(menuList);
+		List<SysPermission> result = MenuHelper.buildTree(permissionList);
 
 		return result;
 	}
@@ -102,7 +102,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 		//获取用户角色信息
 		SysUser user = userService.getUserInfoByUsername(username);
 		List<Long> userRoles = userRoleService.getRoleByUserId(user.getId());
-		List<SysMenu> menuList;
+		List<SysPermission> permissionList;
 		boolean isAdmin = false;
 		//查询角色权限
 		for (Long roleId : userRoles) {
@@ -112,14 +112,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 			}
 		}
 		if (isAdmin) {
-			menuList = baseMapper.selectList(new QueryWrapper<SysMenu>().eq("status", 1).orderByAsc("sort_value"));
+			permissionList = baseMapper.selectList(new QueryWrapper<SysPermission>().eq("status", 1).orderByAsc("sort_value"));
 		} else {
-			menuList = baseMapper.findPermissionByUserId(user.getId());
+			permissionList = baseMapper.findPermissionByUserId(user.getId());
 		}
 		List<String> permsList = new ArrayList<>();
-		for (SysMenu menu : menuList) {
-			if (!StringUtils.isEmpty(menu.getPerms())){
-				permsList.add(menu.getPerms());
+		for (SysPermission permission : permissionList) {
+			if (!StringUtils.isEmpty(permission.getPerms())){
+				permsList.add(permission.getPerms());
 			}
 		}
 		return permsList;

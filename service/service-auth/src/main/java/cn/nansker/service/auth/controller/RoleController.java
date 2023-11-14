@@ -1,9 +1,9 @@
 package cn.nansker.service.auth.controller;
 
-import cn.nansker.service.auth.service.SysRoleMenuService;
+import cn.nansker.service.auth.service.SysRolePermissionService;
 import cn.nansker.service.auth.service.SysRoleService;
 import cn.nansker.model.auth.SysRole;
-import cn.nansker.model.auth.SysRoleMenu;
+import cn.nansker.model.auth.SysRolePermission;
 import cn.nansker.model.vo.RolePermissionAssignVo;
 import cn.nansker.common.utils.result.ResultData;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -28,7 +28,7 @@ public class RoleController {
 	@Autowired
 	private SysRoleService roleService;
 	@Autowired
-	SysRoleMenuService roleMenuService;
+	SysRolePermissionService rolePermissionService;
 
 	@ApiOperation("获取全部角色列表")
 	@GetMapping("/all")
@@ -89,17 +89,17 @@ public class RoleController {
 	@ApiParam(name = "id", value = "角色id")
 	@GetMapping("/permission/{id}")
 	public ResultData getRolePermissionByRoleId(@PathVariable Long id) {
-		QueryWrapper<SysRoleMenu> queryWrapper = new QueryWrapper<>();
+		QueryWrapper<SysRolePermission> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("role_id",id);
-		List<SysRoleMenu> result = roleMenuService.list(queryWrapper);
+		List<SysRolePermission> result = rolePermissionService.list(queryWrapper);
 		return ResultData.ok().data(result);
 	}
 
 	@ApiOperation("分配角色权限")
-	@ApiParam(name = "roleMenuAssign", value = "角色权限信息")
+	@ApiParam(name = "rolePermissionAssign", value = "角色权限信息实体")
 	@PostMapping("/permission/assign")
-	public ResultData doRolePermissionAssign(@RequestBody RolePermissionAssignVo roleMenuAssign) {
-		roleMenuService.doAssign(roleMenuAssign);
+	public ResultData doRolePermissionAssign(@RequestBody RolePermissionAssignVo rolePermissionAssign) {
+		rolePermissionService.doAssign(rolePermissionAssign);
 		return ResultData.ok();
 	}
 }

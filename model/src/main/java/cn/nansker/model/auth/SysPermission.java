@@ -26,9 +26,9 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("sys_menu")
-@ApiModel(value="SysMenu对象", description="菜单表")
-public class SysMenu extends BaseEntity implements Serializable {
+@TableName("sys_permission")
+@ApiModel(value="SysPermission对象", description="菜单表")
+public class SysPermission extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -74,5 +74,5 @@ public class SysMenu extends BaseEntity implements Serializable {
 
     @ApiModelProperty(value = "子节点")
     @TableField(exist = false)
-    private List<SysMenu> children;
+    private List<SysPermission> children;
 }

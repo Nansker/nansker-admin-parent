@@ -1,6 +1,6 @@
 package cn.nansker.service.auth.service.impl;
 
-import cn.nansker.service.auth.service.SysMenuService;
+import cn.nansker.service.auth.service.SysPermissionService;
 import cn.nansker.service.auth.service.SysUserService;
 import cn.nansker.model.auth.SysUser;
 import cn.nansker.security.custom.CustomUser;
@@ -29,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private SysUserService userService;
 
 	@Autowired
-	private SysMenuService menuService;
+	private SysPermissionService permissionService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -42,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new CustomException(StatusCode.ACCOUNT_STOP.getMessage());
 		}
 		//查询用户权限
-		List<String> permissions = menuService.getPermissionHandleByUsername(username);
+		List<String> permissions = permissionService.getPermissionHandleByUsername(username);
 		//设置权限
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		for (String permission : permissions) {

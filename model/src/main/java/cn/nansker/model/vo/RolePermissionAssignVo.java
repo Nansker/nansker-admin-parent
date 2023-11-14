@@ -12,11 +12,11 @@ import java.util.List;
  * @description 角色权限分配数据
  */
 @Data
-@ApiModel(value = "RoleMenuAssignVo对象", description = "角色权限分配")
+@ApiModel(value = "RolePermissionAssignVo", description = "角色权限分配")
 public class RolePermissionAssignVo {
 	@ApiModelProperty(value = "用户id")
 	private Long roleId;
 	@ApiModelProperty(value = "菜单id列表")
-	private List<Long> menuIdList;
+	private List<Long> permissionIdList;
 
 }

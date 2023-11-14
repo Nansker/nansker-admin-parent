@@ -8,7 +8,7 @@ import cn.nansker.model.vo.RouterVo;
 import cn.nansker.model.vo.UserInfoVo;
 import cn.nansker.model.vo.AccountVo;
 import cn.nansker.service.auth.mapper.SysUserMapper;
-import cn.nansker.service.auth.service.SysMenuService;
+import cn.nansker.service.auth.service.SysPermissionService;
 import cn.nansker.service.auth.service.SysUserRoleService;
 import cn.nansker.service.auth.service.SysUserService;
 import cn.nansker.service.base.exception.CustomException;
@@ -34,7 +34,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Autowired
 	SysUserRoleService userRoleService;
 	@Autowired
-	SysMenuService menuService;
+	SysPermissionService permissionService;
 
 	@Override
 	public String login(AccountVo user) {
@@ -99,7 +99,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
 	@Override
 	public List<RouterVo> getPermissionRouterById(Long id) {
-		List<RouterVo> permissions = menuService.getPermissionRouterByUserId(id);
+		List<RouterVo> permissions = permissionService.getPermissionRouterByUserId(id);
 		return permissions;
 	}
 

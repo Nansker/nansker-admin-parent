@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.nansker.service.auth.mapper.SysMenuMapper">
+<mapper namespace="cn.nansker.service.auth.mapper.SysPermissionMapper">
 
-    <resultMap id="BaseResultMap" type="cn.nansker.model.auth.SysMenu">
+    <resultMap id="BaseResultMap" type="cn.nansker.model.auth.SysPermission">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
@@ -21,27 +21,15 @@
     </resultMap>
 
     <select id="findPermissionByUserId" resultMap="BaseResultMap">
-        <!--select-->
-        <!--distinct-->
-        <!--<include refid="Base_Column_List"/>-->
-        <!--from sys_menu m-->
-        <!--inner join sys_role_menu rm on rm.menu_id = m.id-->
-        <!--inner join sys_user_role ur on ur.role_id = rm.role_id-->
-        <!--where-->
-        <!--ur.user_id = #{userId}-->
-        <!--and m.status = 1-->
-        <!--and rm.is_deleted = 0-->
-        <!--and ur.is_deleted = 0-->
-        <!--and m.is_deleted = 0-->
-        SELECT DISTINCT m.*
-        FROM sys_menu m
-        INNER JOIN sys_role_menu rm ON rm.menu_id = m.id
-        INNER JOIN sys_user_role ur ON ur.role_id = rm.role_id
+        SELECT DISTINCT p.*
+        FROM sys_permission p
+        INNER JOIN sys_role_permission rp ON rp.permission_id = p.id
+        INNER JOIN sys_user_role ur ON ur.role_id = rp.role_id
         WHERE ur.user_id = #{userId}
-        AND m.status = 1
-        AND rm.is_deleted = 0
+        AND p.status = 1
+        AND rp.is_deleted = 0
         AND ur.is_deleted = 0
-        AND m.is_deleted = 0;
+        AND p.is_deleted = 0;
     </select>
 
     <sql id="Base_Column_List">
